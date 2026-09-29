@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: comdign.catalog_product.src.test.java.com.budiluhur.AppTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.073 s - in comdign.catalog_product.src.test.java.com.budiluhur.AppTest
