@@ -11,11 +11,9 @@ import com.budiluhur.catalog_product.repository.ProductRepository;
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final DiscountService discountService;
 
-    public ProductService(ProductRepository productRepository, DiscountService discountService) {
+    public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
-        this.discountService = discountService;
     }
 
     public List<Product> getAllProducts() {
@@ -23,29 +21,28 @@ public class ProductService {
     }
 
     public Product getProductById(String id) throws ProductNotFoundException {
-        return productRepository.findById(id);
+        return productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException("Produk dengan ID '" + id + "' tidak ditemukan!"));
     }
 
     public Product createProduct(Product product) {
-        productRepository.addProduct(product);
-        return product;
+        return productRepository.save(product);
     }
 
-    public Product updateProduct(String id, Product product) throws ProductNotFoundException {
-        return productRepository.updateProduct(id, product);
+    public Product updateProduct(String id, Product updatedProduct) throws ProductNotFoundException {
+        Product existingProduct = getProductById(id);
+        existingProduct.setName(updatedProduct.getName());
+        existingProduct.setPrice(updatedProduct.getPrice());
+        return productRepository.save(existingProduct);
     }
 
-    public boolean deleteProduct(String id) throws ProductNotFoundException {
-        return productRepository.deleteById(id);
+    public void deleteProduct(String id) throws ProductNotFoundException {
+        Product existingProduct = getProductById(id);
+        productRepository.delete(existingProduct);
     }
 
-    // Method Mini Challenge (Search)
+    // Method untuk Mini Challenge
     public List<Product> searchProducts(String keyword) {
-        return productRepository.searchByName(keyword);
-    }
-
-    public double getDiscountedProductPrice(String id, double discount) throws ProductNotFoundException {
-        Product product = productRepository.findById(id);
-        return discountService.calculateDiscountedPrice(product.getPrice(), discount);
+        return productRepository.findByNameContainingIgnoreCase(keyword);
     }
 }

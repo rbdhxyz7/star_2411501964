@@ -1,10 +1,24 @@
 package com.budiluhur.catalog_product.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "products")
 public class Product {
+
+    @Id
     private String id;
+
+    @Column(nullable = false, length = 100)
     private String name;
+
+    @Column(nullable = false)
     private double price;
 
+    // No-arg constructor (WAJIB untuk JPA)
     public Product() {}
 
     public Product(String id, String name, double price) {
@@ -13,6 +27,7 @@ public class Product {
         this.price = price;
     }
 
+    // Getter dan Setter
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
